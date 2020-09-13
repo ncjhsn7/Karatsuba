@@ -4,17 +4,27 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Main {
-    static String n1 = "12432134341245674745675476";
-    static String n2 = "7054920058988836008343024";
+    static String n1 = "";
+    static String n2 = "";
 
     public static void main(String[] args) {
-        BigInteger a = new BigInteger("12432134341245674745675476");
-        BigInteger b = new BigInteger("7054920058988836008343024");
-        BigInteger result = a.multiply(b);
+        n1 = args[0];
+        n2 = args[1];
+        System.out.println(removeZero(karatsuba(n1, n2)));
+    }
 
-        System.out.println(result);
-        System.out.println("=-=-=-=-=-=-=-=-=");
-        System.out.println(karatsuba(n1,n2));
+    public static String removeZero(String n) {
+        int aux = 0;
+        if (n.length() == 1 && n.equals("0")) {
+            return "0";
+        }
+        for (int i = 0; i < n.length(); i++) {
+            if (n.charAt(i) != '0') {
+                break;
+            }
+            aux++;
+        }
+        return n.substring(aux);
     }
 
     static String addZeros(String n) {
@@ -42,25 +52,19 @@ public class Main {
             lengthNumber = num2.length();
         }
 
-        if(lengthNumber < 2){
+        if (lengthNumber < 2) {
             int value = Integer.parseInt(num1) * Integer.parseInt(num2);
             return String.valueOf(value);
         }
 
         while (num1.length() % 3 != 0) {
-            addZeros(num1);
+            num1 = addZeros(num1);
         }
 
         while (num2.length() % 3 != 0) {
-            addZeros(num2);
+            num2 = addZeros(num2);
         }
 
-        if (num1.length() > num2.length()) {
-            num1 = matchZeros(num1, num2);
-        }
-        if (num2.length() > num1.length()) {
-            num2 = matchZeros(num2, num1);
-        }
 
 //      AD,
 //      AE, BD
