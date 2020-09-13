@@ -4,12 +4,17 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Main {
-    static String n1 = "10";
-    static String n2 = "10";
+    static String n1 = "12432134341245674745675476";
+    static String n2 = "7054920058988836008343024";
 
     public static void main(String[] args) {
-        System.out.println(karatsuba(n1, n2));
-        System.out.println("ata");
+        BigInteger a = new BigInteger("12432134341245674745675476");
+        BigInteger b = new BigInteger("7054920058988836008343024");
+        BigInteger result = a.multiply(b);
+
+        System.out.println(result);
+        System.out.println("=-=-=-=-=-=-=-=-=");
+        System.out.println(karatsuba(n1,n2));
     }
 
     static String addZeros(String n) {
@@ -30,26 +35,31 @@ public class Main {
         return n1 + "\n" + n2;
     }
 
-    static String karatsuba(String n1, String n2) {
-        int lengthNumber = n1.length();
+    static String karatsuba(String num1, String num2) {
+        int lengthNumber = num1.length();
 
-        if (n2.length() > lengthNumber) {
-            lengthNumber = n2.length();
+        if (num2.length() > lengthNumber) {
+            lengthNumber = num2.length();
         }
 
-        while (n1.length() % 3 != 0) {
-            addZeros(n1);
+        if(lengthNumber < 2){
+            int value = Integer.parseInt(num1) * Integer.parseInt(num2);
+            return String.valueOf(value);
         }
 
-        while (n2.length() % 3 != 0) {
-            addZeros(n2);
+        while (num1.length() % 3 != 0) {
+            addZeros(num1);
         }
 
-        if (n1.length() > n2.length()) {
-            n1 = matchZeros(n1, n2);
+        while (num2.length() % 3 != 0) {
+            addZeros(num2);
         }
-        if (n2.length() > n1.length()) {
-            n2 = matchZeros(n2, n1);
+
+        if (num1.length() > num2.length()) {
+            num1 = matchZeros(num1, num2);
+        }
+        if (num2.length() > num1.length()) {
+            num2 = matchZeros(num2, num1);
         }
 
 //      AD,
@@ -58,12 +68,12 @@ public class Main {
 //      BF, CE
 //      CF
 
-        String a = n1.substring(0, n1.length() / 3);
-        String b = n1.substring(n1.length() / 3, ((n1.length() / 3) * 2));
-        String c = n1.substring(((n1.length() / 3) * 2), n1.length());
-        String d = n2.substring(0, n2.length() / 3);
-        String e = n2.substring(n2.length() / 3, ((n2.length() / 3) * 2));
-        String f = n2.substring(((n2.length() / 3) * 2), n2.length());
+        String a = num1.substring(0, num1.length() / 3);
+        String b = num1.substring(num1.length() / 3, ((num1.length() / 3) * 2));
+        String c = num1.substring(((num1.length() / 3) * 2), num1.length());
+        String d = num2.substring(0, num2.length() / 3);
+        String e = num2.substring(num2.length() / 3, ((num2.length() / 3) * 2));
+        String f = num2.substring(((num2.length() / 3) * 2), num2.length());
 
         String ad = karatsuba(a, d);
         String ae = karatsuba(a, e);
@@ -76,24 +86,24 @@ public class Main {
         String cd = karatsuba(c, d);
 
 
-        String adShift = shift(ad, (n1.length() / 3) * 4);
-        String aeShift = shift(ae, (n1.length() / 3) * 3);
-        String bdShift = shift(bd, (n1.length() / 3) * 3);
-        String afShift = shift(af, (n1.length() / 3) * 2);
-        String cdShift = shift(cd, (n1.length() / 3) * 2);
-        String beShift = shift(be, (n1.length() / 3) * 2);
-        String bfShift = shift(bf, n1.length() / 3);
-        String ceShift = shift(ce, n1.length() / 3);
+        String adShift = shift(ad, (num1.length() / 3) * 4);
+        String aeShift = shift(ae, (num1.length() / 3) * 3);
+        String bdShift = shift(bd, (num1.length() / 3) * 3);
+        String afShift = shift(af, (num1.length() / 3) * 2);
+        String cdShift = shift(cd, (num1.length() / 3) * 2);
+        String beShift = shift(be, (num1.length() / 3) * 2);
+        String bfShift = shift(bf, num1.length() / 3);
+        String ceShift = shift(ce, num1.length() / 3);
         String cfShift = shift(cf, 0);
 
         String adae = sum(adShift, aeShift);
-        String adaebd = sum(adae, bd);
-        String adaebdaf = sum(adaebd, af);
-        String adaebdafcd = sum(adaebdaf, cd);
-        String adaebdafcdbe = sum(adaebdafcd, be);
-        String adaebdafcdbebf = sum(adaebdafcdbe, bf);
-        String adaebdafcdbebfce = sum(adaebdafcdbebf, ce);
-        String adaebdafcdbebfcecf = sum(adaebdafcdbebfce, cf);
+        String adaebd = sum(adae, bdShift);
+        String adaebdaf = sum(adaebd, afShift);
+        String adaebdafcd = sum(adaebdaf, cdShift);
+        String adaebdafcdbe = sum(adaebdafcd, beShift);
+        String adaebdafcdbebf = sum(adaebdafcdbe, bfShift);
+        String adaebdafcdbebfce = sum(adaebdafcdbebf, ceShift);
+        String adaebdafcdbebfcecf = sum(adaebdafcdbebfce, cfShift);
 
         return adaebdafcdbebfcecf;
     }
@@ -104,22 +114,6 @@ public class Main {
         return n;
     }
 
-    static String removeZero(String num) {
-        int aux = 0;
-        if (num.length() == 1 && num.equalsIgnoreCase("0")) {
-            return "0";
-        }
-
-        for (int i = 0; i < num.length(); i++) {
-            if (num.charAt(i) != '0') {
-                break;
-            }
-            aux++;
-        }
-
-        return num.substring(aux, num.length());
-    }
-
     static String shift(String n, int qtd) {
         int x = 0;
         while (qtd > x) {
@@ -127,15 +121,6 @@ public class Main {
             x++;
         }
         return n;
-    }
-
-    static void fillZero() {
-        while (n1.length() > n2.length()) {
-            n2 = "0" + n2;
-        }
-        while (n2.length() > n1.length()) {
-            n1 = "0" + n1;
-        }
     }
 
     public static String sum(String n1, String n2) {
@@ -172,34 +157,4 @@ public class Main {
 
         return result;
     }
-
-    public static String sub(String num1, String num2) {
-        int n = num1.length();
-
-        if (num2.length() > n)
-            n = num2.length();
-        num1 = completeZero(num1, n);
-        num2 = completeZero(num2, n);
-
-        String result = "";
-        int carry = 0;
-
-        for (int i = n - 1; i >= 0; i--) {
-            int aux2 = num1.charAt(i) - num2.charAt(i);
-            if (carry == 1) {
-                aux2--;
-                carry = 0;
-            }
-            if (aux2 < 0) {
-                carry = 1;
-                aux2 += 10;
-
-            } else {
-                carry = 0;
-            }
-            result = aux2 + result;
-        }
-        return result;
-    }
-
 }
