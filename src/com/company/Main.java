@@ -4,12 +4,11 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Main {
-    static String n1 = "";
-    static String n2 = "";
+    static String n1 = "5791162";
+    static String n2 = "52252";
 
     public static void main(String[] args) {
-        n1 = args[0];
-        n2 = args[1];
+        System.out.println(Integer.parseInt(n1)*Integer.parseInt(n2));
         System.out.println(removeZero(karatsuba(n1, n2)));
     }
 
@@ -29,20 +28,6 @@ public class Main {
 
     static String addZeros(String n) {
         return "0" + n;
-    }
-
-    static String matchZeros(String n1, String n2) {
-        if (n1.length() > n2.length()) {
-            while (n1.length() != n2.length()) {
-                n2 = addZeros(n2);
-            }
-        }
-        if (n2.length() > n1.length()) {
-            while (n1.length() != n2.length()) {
-                n1 = addZeros(n1);
-            }
-        }
-        return n1 + "\n" + n2;
     }
 
     static String karatsuba(String num1, String num2) {
